@@ -2,6 +2,12 @@
 {
     internal class Constants
     {
+        public const string GUID = "dev9998.GorillaShirts";
+
+        public const string Name = "GorillaShirts";
+
+        public const string Version = "2.4.5";
+
         public const string AssetBundleName = "GorillaShirts.Content.legacyshirtbundle";
 
         public const string StandAssetName = "ShirtStand";

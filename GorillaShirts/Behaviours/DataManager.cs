@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using BepInEx;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -72,7 +73,11 @@ namespace GorillaShirts.Behaviours
         public void WriteData()
         {
             string output = JsonConvert.SerializeObject(data, serializeSettings);
-            ThreadingUtility.InvokeMainMethod(() => File.WriteAllText(dataLocation, output));
+            ThreadingHelper.Instance.StartAsyncInvoke(() =>
+            {
+                File.WriteAllText(dataLocation, output);
+                return null;
+            });
         }
 
         public bool HasItem(string key) => data.ContainsKey(key);

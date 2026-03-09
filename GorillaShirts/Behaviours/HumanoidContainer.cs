@@ -1,10 +1,8 @@
-﻿using GorillaLibrary.Extensions;
+using GorillaExtensions;
 using GorillaShirts.Behaviours.Appearance;
 using GorillaShirts.Models.Cosmetic;
 using GorillaShirts.Patches;
 using UnityEngine;
-using GorillaLibrary.Models;
-using HarmonyLib;
 
 namespace GorillaShirts.Behaviours
 {
@@ -16,6 +14,7 @@ namespace GorillaShirts.Behaviours
 
         public VRRig Rig;
 
+        public GorillaIK IK;
         public float NameTagZOffset = 0f;
 
         public void Awake()
@@ -23,14 +22,15 @@ namespace GorillaShirts.Behaviours
             Rig = GetComponent<VRRig>();
             Root = gameObject;
 
-            Head = Rig.GetBone(GorillaRigBone.Head);
-            Body = Rig.GetBone(GorillaRigBone.Body);
-            LeftHand = Rig.GetBone(GorillaRigBone.LeftHand);
-            RightHand = Rig.GetBone(GorillaRigBone.RightHand);
-            LeftUpper = Rig.GetBone(GorillaRigBone.LeftUpperArm);
-            RightUpper = Rig.GetBone(GorillaRigBone.RightUpperArm);
-            LeftLower = Rig.GetBone(GorillaRigBone.LeftLowerArm);
-            RightLower = Rig.GetBone(GorillaRigBone.RightLowerArm);
+            IK = Rig.myIk ?? gameObject.GetOrAddComponent<GorillaIK>();
+            Head = IK.headBone ?? Rig.headMesh.transform;
+            Body = IK.bodyBone.Find("body");
+            LeftHand = IK.leftHand;
+            RightHand = IK.rightHand;
+            LeftUpper = IK.leftUpperArm ?? IK.bodyBone.Find("shoulder.L");
+            RightUpper = IK.rightUpperArm ?? IK.bodyBone.Find("shoulder.R");
+            LeftLower = IK.leftLowerArm ?? IK.bodyBone.Find("shoulder.L/forearm.L");
+            RightLower = IK.rightLowerArm ?? IK.bodyBone.Find("shoulder.R/forearm.R");
 
             MainSkin = Rig.mainSkin;
             FaceSkin = Rig.faceSkin;
@@ -79,8 +79,8 @@ namespace GorillaShirts.Behaviours
         {
             if (Rig.TryGetComponent(out VRRigAnchorOverrides anchorOverrides))
             {
-                AccessTools.Method(anchorOverrides.GetType(), "UpdateName").Invoke(anchorOverrides, null);
-                AccessTools.Method(anchorOverrides.GetType(), "UpdateBadge").Invoke(anchorOverrides, null);
+                anchorOverrides.UpdateName();
+                anchorOverrides.UpdateBadge();
             }
 
             base.MoveNameTag();
@@ -106,7 +106,7 @@ namespace GorillaShirts.Behaviours
         private void RefreshBodyRenderer()
         {
             if (Rig is null || Rig.bodyRenderer is not GorillaBodyRenderer bodyRenderer) return;
-            AccessTools.Method(bodyRenderer.GetType(), "Refresh").Invoke(bodyRenderer, null);
+            bodyRenderer.Refresh();
         }
     }
 }

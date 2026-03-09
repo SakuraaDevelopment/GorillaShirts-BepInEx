@@ -1,7 +1,6 @@
 ﻿using GorillaShirts.Behaviours;
 using GorillaShirts.Behaviours.UI;
 using GorillaShirts.Models.UI;
-using MelonLoader;
 using System.Linq;
 
 namespace GorillaShirts.Models.StateMachine
@@ -30,7 +29,7 @@ namespace GorillaShirts.Models.StateMachine
                 .Replace("[PACKCOUNT]", ShirtManager.Instance.Packs.Count(pack => pack != ShirtManager.Instance.FavouritePack).ToString())
                 .Replace("[RELEASECOUNT]", ShirtManager.Instance.Packs.Count(pack => pack.Release is not null).ToString())
                 .Replace("[BUILDCONFIG]", build_config)
-                .Replace("[VERSION]", Melon<Plugin>.Instance.Info.Version)
+                .Replace("[VERSION]", Plugin.Info.Metadata.Version.ToString())
                 .Replace("[PLAYERNAME]", GorillaTagger.Instance.offlineVRRig.NormalizeName(true, NetworkSystem.Instance.GetMyNickName()));
         }
 

@@ -37,7 +37,7 @@ namespace GorillaShirts.Models.StateMachine
 
             if (button == EButtonType.Button2)
             {
-                string url = @"https://github.com/developer9998/GorillaShirts/releases/latest";
+                string url = @"https://github.com/SakuraaDevelopment/GorillaShirts-BepInEx/releases/latest";
                 try
                 {
                     Process.Start(new ProcessStartInfo
